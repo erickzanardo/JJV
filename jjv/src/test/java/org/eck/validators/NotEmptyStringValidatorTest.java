@@ -14,7 +14,7 @@ public class NotEmptyStringValidatorTest {
     @Test
     public void testValidate() {
         JsonValidator validator = new JsonValidator();
-        validator.addValidator("someField", NotEmptyStringValidator.class);
+        validator.addValidator("someField", new NotEmptyStringValidator());
 
         JsonObject obj = new JsonObject();
         

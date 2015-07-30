@@ -10,22 +10,20 @@ import org.eck.json.exception.JsonValidateException;
 import com.google.gson.JsonObject;
 
 public class JsonValidator {
-    private Map<String, Class<? extends JsonTypeValidator>> validations = new HashMap<>();
-    private static Map<Class<? extends JsonTypeValidator>, JsonTypeValidator> validators;
+    private Map<String, JsonTypeValidator> validations = new HashMap<>();
 
-    public void addValidator(String field, Class<? extends JsonTypeValidator> validator) {
+    public void addValidator(String field, JsonTypeValidator validator) {
         validations.put(field, validator);
     }
 
     public JsonValidationResult validate(JsonObject obj) {
         JsonValidationResult result = new JsonValidationResult();
 
-        Set<Entry<String, Class<? extends JsonTypeValidator>>> entrySet = validations.entrySet();
-        for(Entry<String, Class<? extends JsonTypeValidator>> entry : entrySet) {
+        Set<Entry<String, JsonTypeValidator>> entrySet = validations.entrySet();
+        for(Entry<String, JsonTypeValidator> entry : entrySet) {
             String field = entry.getKey();
-            Class<? extends JsonTypeValidator> validatorClass = entry.getValue();
+            JsonTypeValidator validator = entry.getValue();
 
-            JsonTypeValidator validator = validatorInstance(validatorClass);
             try {
                 validator.validate(obj.get(field));
             } catch(JsonValidateException e) {
@@ -34,21 +32,5 @@ public class JsonValidator {
         }
 
         return result;
-    }
-
-    private JsonTypeValidator validatorInstance(Class<? extends JsonTypeValidator> clazz) {
-        if(JsonValidator.validators == null) {
-            JsonValidator.validators = new HashMap<>();
-        }
-
-        if(JsonValidator.validators.get(clazz) == null) {
-            try {
-                JsonTypeValidator instance = clazz.newInstance();
-                JsonValidator.validators.put(clazz, instance);
-            } catch(Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return JsonValidator.validators.get(clazz);
     }
 }
