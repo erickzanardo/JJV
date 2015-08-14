@@ -8,20 +8,26 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 public class JsonValidationResult {
-    private Map<String, String> errors = new HashMap<String, String>();
+    private Map<String, List<String>> errors = new HashMap<String, List<String>>();
 
     public void addError(String field, String error) {
-        errors.put(field, error);
+        if(errors.get(field) == null) errors.put(field, new ArrayList<String>());
+        errors.get(field).add(error);
     }
 
     public String getError(String field) {
+        if(errors.get(field) != null) return errors.get(field).get(0);
+        return null;
+    }
+
+    public List<String> getErrors(String field) {
         return errors.get(field);
     }
 
     public List<String> fieldsInError() {
         List<String> result = new ArrayList<String>();
-        Set<Entry<String, String>> entrySet = errors.entrySet();
-        for(Entry<String, String> entry : entrySet) {
+        Set<Entry<String, List<String>>> entrySet = errors.entrySet();
+        for(Entry<String, List<String>> entry : entrySet) {
             result.add(entry.getKey());
         }
         return result;
