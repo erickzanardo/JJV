@@ -5,20 +5,20 @@ Simple library to help validate JsonObjects in Java, JJV works above the google 
 ## Usage
 
 ```java
-        JsonValidator validator = new JsonValidator();
-        validator.addValidator("someField", new NotNullValidator());
-        validator.addValidator("someOtherField", new BiggerThanZeroValidator());
+JsonValidator validator = new JsonValidator();
+validator.addValidator("someField", new NotNullValidator());
+validator.addValidator("someOtherField", new BiggerThanZeroValidator());
         
-        JsonObject obj = new JsonObject();
-        obj.addProperty("someField", JsonNull.INSTANCE);
-        obj.addProperty("someOtherField", 0);
+JsonObject obj = new JsonObject();
+obj.addProperty("someField", JsonNull.INSTANCE);
+obj.addProperty("someOtherField", 0);
         
-        result.hasErrors(); // true
-        result.fieldsInError().size(); // 2
-        result.fieldsInError().get(0); // someField
-        result.fieldsInError().get(1); // someOtherField
-        result.getError("someField"); // NotNull
-        result.getError("someOtherField"); // NumberMustBeBiggerThanZero
+result.hasErrors(); // true
+result.fieldsInError().size(); // 2
+result.fieldsInError().get(0); // someField
+result.fieldsInError().get(1); // someOtherField
+result.getError("someField"); // NotNull
+result.getError("someOtherField"); // NumberMustBeBiggerThanZero
 ```
 
 ## Built-in validators
